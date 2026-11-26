@@ -432,3 +432,18 @@ mjx-container { overflow-x: auto; }
   display: block;
   margin: 0 auto;
 }
+
+/* Justified prose with hyphenation to avoid uneven word-spacing gaps
+   in the narrow content column. Scoped to <p> only — math (mjx-container)
+   and inline code keep their natural flow so formulas and identifiers
+   never get split mid-expression. */
+#post-body p {
+  text-align: justify;
+  hyphens: auto;
+  -webkit-hyphens: auto;
+}
+#post-body p mjx-container,
+#post-body p code {
+  hyphens: none;
+  -webkit-hyphens: none;
+}
