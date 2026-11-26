@@ -3,6 +3,60 @@
 Personal academic site. Plain Jekyll, dark theme only, deployed via GitHub
 Actions. No Quartz, no Hugo, no client-side framework.
 
+## One-time setup (do this before anything else works)
+
+1. **Switch the Pages source to Actions.** By default a new repo serves
+   via GitHub's legacy branch-based builder, which ignores this repo's
+   `Gemfile`/`_plugins` and will produce a broken site (empty blog, no
+   citations). Go to repo **Settings → Pages → Build and deployment →
+   Source** and change it to **"GitHub Actions"**.
+2. Push to `main`. The "Build and deploy site" workflow under the
+   **Actions** tab should go green. If it's red, open the failed run and
+   read the `build` job log — it'll usually point at a missing gem or a
+   Liquid/YAML typo.
+
+## Editing your bio
+
+Open `index.html` at the repo root. The bio text is the two `<p>` tags
+inside `.home-bio` — edit directly, it's plain HTML/Markdown-ish prose, no
+build step needed beyond push. The tagline ("Research Scholar @ IIIT
+Bangalore") is the `<p class="tagline">` just under your name.
+
+## Adding your social links
+
+Everything lives in one place — `_config.yml`, under `author:`:
+
+```yaml
+author:
+  name: Sayak Chowdhury
+  email: your-email@example.com
+  github: your-github-username
+  twitter: your-twitter-handle
+  linkedin: your-linkedin-handle
+  cv: "https://link-to-your-cv.pdf"
+```
+
+Fill in the real values and push — `index.html` already references these
+fields (`site.author.github`, etc.) for the GitHub/Twitter/LinkedIn/CV/Email
+icons, so you never need to touch HTML for this. The RSS icon links to the
+auto-generated `/feed.xml` and needs no configuration.
+
+## Adding a news item
+
+Open `_data/news.yml` and add an entry to the top (or anywhere — they're
+auto-sorted by date and grouped by month on `/news/`):
+
+```yaml
+- date: 2026-04-01
+  html: >
+    Short description of what happened, can include <strong>bold</strong>
+    and links. <br><a href="/assets/papers/something.pdf">Slides (PDF)</a>
+```
+
+`date` controls sort order and which month heading it falls under. `html`
+is raw HTML, not Markdown — wrap emphasis in `<strong>`/`<em>` tags, not
+`**`/`*`.
+
 ## Writing a new blog post (Obsidian workflow)
 
 1. Open this repo as an Obsidian vault (or just the `blog/` folder) on your
@@ -30,8 +84,13 @@ Actions. No Quartz, no Hugo, no client-side framework.
    - **Citations**: add entries to `_bibliography/references.bib`, then
      cite with `{% cite somekey %}` inline. A References section renders
      automatically at the bottom of the post (only entries you actually
-     cited). See [jekyll-scholar docs](https://github.com/inukshuk/jekyll-scholar)
+     cited, and only if you cited at least one — the section is hidden
+     otherwise). See [jekyll-scholar docs](https://github.com/inukshuk/jekyll-scholar)
      for locators, suppressing author names, etc.
+     Example: `Deep models can be verified with SMT solvers {% cite reluplex %}.`
+     where `reluplex` is a `@inproceedings{reluplex, ...}` key already in
+     `_bibliography/references.bib` (175 entries already migrated from the
+     old site, ready to cite).
    - **Obsidian callouts**: `>[!note]`, `>[!info]`, `>[!warning]`,
      `>[!question]` render as styled boxes, same syntax as Obsidian.
    - **Table of contents**: generated automatically from your `##`/`###`
@@ -80,6 +139,14 @@ research.html          publications page
 
 Add a BibTeX entry to `_bibliography/references.bib`, then add a
 `.pub-entry` block to `research.html` following the existing SETA example.
+
+## Logo / favicon
+
+`assets/images/logo.png` (header brand mark, 160x160) and
+`assets/images/favicon.png` (browser tab icon, 64x64) are the green lion
+icon from the old Quartz site. Replace either file in place (same
+filename) to swap it — no HTML changes needed, `_layouts/default.html`
+references both by path.
 
 ## Deployment
 
