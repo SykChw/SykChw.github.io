@@ -424,3 +424,15 @@ sup.footnote a, a.footnote {
 
 /* MathJax container spacing */
 mjx-container { overflow-x: auto; }
+
+/* Diagram images with transparent/white backgrounds (plots, hand-drawn
+   figures) need a light card so dark content stays legible on the dark
+   theme, and so the image's own white background doesn't look like a
+   rendering glitch. */
+#post-body img.diagram-card {
+  background: #fff;
+  border-radius: 8px;
+  padding: 14px;
+  display: block;
+  margin: 0 auto;
+}
