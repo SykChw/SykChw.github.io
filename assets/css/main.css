@@ -22,15 +22,6 @@
   --sidenote-width: 280px;
 }
 
-@media (max-width: 480px) {
-  body { font-size: 16px; }
-  .page-wrap { padding: 20px 16px 16px; }
-  .site-header { padding: 12px 16px; }
-  .brand-logo { width: 24px; height: 24px; }
-  h1 { font-size: 1.6rem; }
-  h2 { font-size: 1.25rem; }
-}
-
 * { box-sizing: border-box; }
 
 html { color-scheme: dark; }
@@ -87,6 +78,15 @@ th { background: var(--bg-elevated); font-family: var(--sans); }
 
 .table-scroll { overflow-x: auto; margin: 1.5em 0; }
 .table-scroll table { margin: 0; }
+
+@media (max-width: 480px) {
+  body { font-size: 16px; }
+  .page-wrap { padding: 20px 16px 16px; }
+  .site-header { padding: 12px 16px; }
+  .brand-logo { width: 24px; height: 24px; }
+  h1 { font-size: 1.6rem; }
+  h2 { font-size: 1.25rem; }
+}
 
 /* ==========================================================================
    Site header / nav
@@ -176,6 +176,9 @@ th { background: var(--bg-elevated); font-family: var(--sans); }
 .social-links a { border-bottom: none; color: var(--text-dim); }
 .social-links a:hover { color: var(--accent); }
 .social-links svg { width: 20px; height: 20px; fill: currentColor; display: block; }
+
+.contact-note { color: var(--text-faint); font-size: 0.85rem; margin-top: 1em; }
+.contact-note code { font-size: 0.85em; }
 
 @media (max-width: 720px) {
   .home-grid { grid-template-columns: 1fr; }

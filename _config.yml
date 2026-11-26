@@ -4,7 +4,6 @@ url: "https://sykchw.github.io"
 baseurl: ""
 author:
   name: Sayak Chowdhury
-  email: your-email@example.com        # used for the mailto: link and site.author.email
   github: your-github-username         # used in https://github.com/USERNAME
   twitter: your-twitter-handle         # used in https://twitter.com/HANDLE
   linkedin: your-linkedin-handle       # used in https://www.linkedin.com/in/HANDLE/
@@ -30,7 +29,6 @@ defaults:
       type: posts
     values:
       layout: post
-      comments: false
   - scope:
       path: ""
       type: pages
@@ -41,6 +39,9 @@ plugins:
   - jekyll-scholar
   - jekyll-feed
   - jekyll-sitemap
+
+feed:
+  posts_limit: 25
 
 scholar:
   style: apa
