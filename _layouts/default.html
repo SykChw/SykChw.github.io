@@ -25,7 +25,14 @@
       options: { skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code'] }
     };
   </script>
-  <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <!-- Pinned to an exact version with Subresource Integrity so a compromised
+       CDN can never silently serve different code. -->
+  <script
+    id="MathJax-script"
+    async
+    src="https://cdn.jsdelivr.net/npm/mathjax@3.2.2/es5/tex-mml-chtml.js"
+    integrity="sha384-Wuix6BuhrWbjDBs24bXrjf4ZQ5aFeFWBuKkFekO2t8xFU0iNaLQfp2K6/1Nxveei"
+    crossorigin="anonymous"></script>
 </head>
 <body>
   <header class="site-header">
@@ -49,11 +56,30 @@
     © {{ site.time | date: '%Y' }} {{ site.author.name }} · built with Jekyll, deployed via GitHub Actions
   </footer>
 
-  <!-- Mermaid: dark theme only, with custom class defs available to posts -->
-  <script type="module">
-    import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs";
+  <!-- Mermaid: dark theme only, with custom class defs available to posts.
+       Using the self-contained UMD bundle (not the ESM build, which pulls
+       unprotected chunk files via dynamic import -- SRI can't cover those)
+       so the single integrity hash below covers the whole library. -->
+  <script
+    src="https://cdn.jsdelivr.net/npm/mermaid@11.17.2/dist/mermaid.min.js"
+    integrity="sha384-EOXBFmc3gx5mb+vn0vPvvGqACToJD24hhacX5Yx+8NUUQrHIle/Qi5Bg9o3zKwW2"
+    crossorigin="anonymous"></script>
+  <script>
+    // Kramdown + Rouge render fenced ```mermaid blocks as
+    // <pre><code class="language-mermaid">...</code></pre>, not
+    // <div class="mermaid">...</div> -- which is the only thing Mermaid's
+    // startOnLoad/run() ever scans for. Convert them here before running.
+    function hoistMermaidCodeBlocks(root) {
+      root.querySelectorAll("pre > code.language-mermaid").forEach(function (code) {
+        var div = document.createElement("div");
+        div.className = "mermaid";
+        div.textContent = code.textContent;
+        code.parentElement.replaceWith(div);
+      });
+    }
+
     mermaid.initialize({
-      startOnLoad: true,
+      startOnLoad: false,
       theme: "dark",
       themeVariables: {
         background: "#121214",
@@ -65,7 +91,13 @@
         tertiaryColor: "#1a1a1d"
       }
     });
-    window.__mermaidRun = () => mermaid.run();
+
+    hoistMermaidCodeBlocks(document);
+    mermaid.run().catch(function (err) { console.error("Mermaid render failed:", err); });
+    window.__mermaidRun = function () {
+      hoistMermaidCodeBlocks(document);
+      mermaid.run().catch(function (err) { console.error("Mermaid render failed:", err); });
+    };
   </script>
 
   <script src="{{ '/assets/js/toc.js' | relative_url }}" defer></script>

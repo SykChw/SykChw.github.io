@@ -6,14 +6,43 @@
 (function () {
   function reRenderMath(el) {
     if (window.MathJax && window.MathJax.typesetPromise) {
-      window.MathJax.typesetPromise([el]).catch(function () {});
+      // Safe to call repeatedly / on overlapping content: MathJax tracks
+      // already-typeset math internally and only processes new math each
+      // call (see "Updating Previously Typeset Content" in MathJax v3 docs).
+      return window.MathJax.typesetPromise([el]).catch(function () {});
     }
+    return Promise.resolve();
   }
 
   function reRenderMermaid() {
     if (window.__mermaidRun) {
-      try { window.__mermaidRun(); } catch (e) {}
+      try {
+        var result = window.__mermaidRun();
+        return result && result.then ? result : Promise.resolve();
+      } catch (e) {
+        return Promise.resolve();
+      }
     }
+    return Promise.resolve();
+  }
+
+  function resolveCollisions(sideCol) {
+    // Must run AFTER math/mermaid have finished rendering inside the
+    // sidenotes -- otherwise this measures the height of raw "$x$" text or
+    // mermaid source lines instead of the actual typeset/rendered output,
+    // and notes containing math or diagrams will visually overlap.
+    var notes = Array.prototype.slice.call(sideCol.querySelectorAll(".sidenote"));
+    notes.sort(function (a, b) { return parseFloat(a.style.top) - parseFloat(b.style.top); });
+    var minGap = 12;
+    var lastBottom = -Infinity;
+    notes.forEach(function (n) {
+      var top = parseFloat(n.style.top);
+      if (top < lastBottom + minGap) {
+        top = lastBottom + minGap;
+        n.style.top = top + "px";
+      }
+      lastBottom = top + n.getBoundingClientRect().height;
+    });
   }
 
   function init() {
@@ -27,11 +56,13 @@
     if (!footnoteList) return;
 
     var refs = body.querySelectorAll('a[href^="#fn:"]');
-    var wrapRect = document.querySelector(".post-body-wrap").getBoundingClientRect();
+    var wrapEl = document.querySelector(".post-body-wrap");
+    if (!wrapEl) return;
+    var wrapRect = wrapEl.getBoundingClientRect();
 
     refs.forEach(function (ref) {
       var fnId = ref.getAttribute("href").substring(1); // "fn:1"
-      var li = body.querySelector("#" + fnId.replace(":", "\\:"));
+      var li = body.querySelector("#" + fnId.replace(/:/g, "\\:"));
       if (!li) return;
 
       var note = document.createElement("div");
@@ -55,24 +86,12 @@
       sideCol.appendChild(note);
     });
 
-    // Resolve vertical collisions: push down any sidenote that overlaps
-    // the previous one.
-    var notes = Array.prototype.slice.call(sideCol.querySelectorAll(".sidenote"));
-    notes.sort(function (a, b) { return parseFloat(a.style.top) - parseFloat(b.style.top); });
-    var minGap = 12;
-    var lastBottom = -Infinity;
-    notes.forEach(function (n) {
-      var top = parseFloat(n.style.top);
-      if (top < lastBottom + minGap) {
-        top = lastBottom + minGap;
-        n.style.top = top + "px";
-      }
-      // placeholder height estimate; refined after layout below
-      lastBottom = top + n.getBoundingClientRect().height;
+    // Render math and diagrams inside the cloned sidenotes BEFORE measuring
+    // heights for collision resolution, so the overlap check sees real
+    // rendered sizes, not raw source text.
+    Promise.all([reRenderMath(sideCol), reRenderMermaid()]).then(function () {
+      resolveCollisions(sideCol);
     });
-
-    reRenderMath(sideCol);
-    reRenderMermaid();
   }
 
   // Run after layout settles (fonts/images can shift heading positions)
