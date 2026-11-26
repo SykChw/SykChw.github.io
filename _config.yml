@@ -49,7 +49,6 @@ scholar:
   bibliography: references.bib
   replace_strings: true
   join_strings: true
-  use_raw_bibtex_entry: false
   query: "@*"
 
 exclude:

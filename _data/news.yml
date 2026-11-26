@@ -1,6 +1,41 @@
+- date: 2024-08-01
+  html: >
+    Joined <strong>Siemens Technology and Services Pvt. Ltd.</strong>, Bangalore,
+    as a Research Intern.
+
 - date: 2025-09-10
   html: >
-    Presented my paper <strong>Robustness Verification for Object Detectors using
-    Set-Based Reachability Analysis</strong> at the <strong>34th International
-    Conference on Artificial Neural Networks (ICANN 2025)</strong> in Kaunas, Lithuania.
-    <br><a href="/assets/papers/395.pdf">Slides (PDF)</a>
+    My paper <strong>Robustness Verification for Object Detectors using
+    Set-Based Reachability Analysis</strong> (joint work with Hardik Khandelwal
+    and Meenakshi D'Souza) was accepted to the <strong>Main Research Track</strong>
+    of the <strong>34th International Conference on Artificial Neural Networks
+    (ICANN 2025)</strong>. Traveled to Kaunas, Lithuania to present the paper in person.
+    <br><a href="/assets/papers/395.pdf">Slides (PDF)</a> ·
+    <a href="https://doi.org/10.1007/978-3-032-04546-1_39">Paper (DOI)</a>
+
+- date: 2025-11-01
+  html: >
+    Concluded my tenure as a Research Intern at <strong>Siemens Technology and
+    Services Pvt. Ltd.</strong>, Bangalore.
+
+- date: 2026-01-05
+  html: >
+    Our paper <strong>SETA: Statistical Fault Attribution for Compound AI
+    Systems</strong> (joint work with Meenakshi D'Souza) was accepted to
+    <strong>CAIN 2026</strong>, co-hosted with <strong>ICSE 2026</strong> in
+    Rio de Janeiro, Brazil.
+    <br><a href="https://arxiv.org/abs/2601.19337">arXiv</a>
+
+- date: 2026-01-15
+  html: >
+    Started interning with <strong>Nykaa</strong> as part of the Machine
+    Learning team.
+
+- date: 2026-07-01
+  html: >
+    Graduating from <strong>IIIT Bangalore</strong> with a Master's degree.
+
+- date: 2026-07-15
+  html: >
+    Joining <strong>Nykaa</strong> full-time as a <strong>Machine Learning
+    Scientist</strong>.

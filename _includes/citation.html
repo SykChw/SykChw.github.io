@@ -1,7 +1,23 @@
-@misc{ {{ page.date | date: "%Y" }}_{{ page.slug | slugify }},
-  title  = {{ "{" }}{{ page.title }}{{ "}" }},
-  author = {{ "{" }}{{ site.author.name }}{{ "}" }},
-  year   = {{ "{" }}{{ page.date | date: "%Y" }}{{ "}" }},
-  howpublished = {{ "{" }}\url{{ "{" }}{{ page.url | absolute_url }}{{ "}" }}{{ "}" }},
-  note   = {{ "{" }}Blog post, accessed {{ "now" | date: "%Y-%m-%d" }}{{ "}" }}
+{%- comment -%}
+  Builds a BibTeX @misc entry for citing this blog post. Avoids interleaving
+  literal "{" / "}" string-literal Liquid tags next to each other (that
+  pattern is fragile and previously broke Liquid's tag parser with
+  "variable ... not properly terminated") by building the whole template
+  with placeholder tokens first, then substituting values with `replace`.
+  Placeholders are double-underscore-wrapped so they can never collide with
+  real post titles/author names/dates.
+{%- endcomment -%}
+{%- assign cite_key = page.date | date: "%Y" | append: "_" | append: page.slug | slugify -%}
+{%- assign cite_url = page.url | absolute_url -%}
+{%- assign cite_year = page.date | date: "%Y" -%}
+{%- assign cite_date = "now" | date: "%Y-%m-%d" -%}
+{%- capture template -%}
+@misc{__CITEKEY__,
+  title  = {__TITLE__},
+  author = {__AUTHOR__},
+  year   = {__YEAR__},
+  howpublished = {\url{__URL__}},
+  note   = {Blog post, accessed __DATE__}
 }
+{%- endcapture -%}
+{{ template | replace: "__CITEKEY__", cite_key | replace: "__TITLE__", page.title | replace: "__AUTHOR__", site.author.name | replace: "__YEAR__", cite_year | replace: "__URL__", cite_url | replace: "__DATE__", cite_date }}

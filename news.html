@@ -11,7 +11,6 @@ permalink: /news/
   {% for item in items %}
     {% assign month_label = item.date | date: "%B %Y" %}
     {% if month_label != current_month %}
-      {% unless forloop.first %}{% endunless %}
       <div class="news-month">{{ month_label }}</div>
       {% assign current_month = month_label %}
     {% endif %}
