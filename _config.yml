@@ -1,0 +1,63 @@
+title: Sayak Chowdhury
+tagline: Research Scholar @ IIIT Bangalore
+url: "https://sykchw.github.io"
+baseurl: ""
+author:
+  name: Sayak Chowdhury
+  email: sayak.iiitb@gmail.com
+  github: SykChw
+  twitter: SykChw
+  linkedin: sykchw
+  cv: "https://drive.google.com/file/d/1qsjnnGeHY47RXF2ZpBrwYypLgdbT8P6A/view?usp=sharing"
+
+description: >
+  Personal academic site of Sayak Chowdhury — research, blog, and notes on
+  neural network verification, AI safety, and machine learning.
+
+markdown: kramdown
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  footnote_nr: 1
+
+highlighter: rouge
+
+permalink: /blog/:year/:month/:day/:title/
+
+defaults:
+  - scope:
+      path: ""
+      type: posts
+    values:
+      layout: post
+      comments: false
+  - scope:
+      path: ""
+      type: pages
+    values:
+      layout: default
+
+plugins:
+  - jekyll-scholar
+  - jekyll-feed
+  - jekyll-sitemap
+
+scholar:
+  style: apa
+  locale: en
+  source: ./_bibliography
+  bibliography: references.bib
+  replace_strings: true
+  join_strings: true
+  use_raw_bibtex_entry: false
+  query: "@*"
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - node_modules
+  - vendor
+  - blog
+  - "*.gemspec"
+

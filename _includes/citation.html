@@ -1,0 +1,7 @@
+@misc{ {{ page.date | date: "%Y" }}_{{ page.slug | slugify }},
+  title  = {{ "{" }}{{ page.title }}{{ "}" }},
+  author = {{ "{" }}{{ site.author.name }}{{ "}" }},
+  year   = {{ "{" }}{{ page.date | date: "%Y" }}{{ "}" }},
+  howpublished = {{ "{" }}\url{{ "{" }}{{ page.url | absolute_url }}{{ "}" }}{{ "}" }},
+  note   = {{ "{" }}Blog post, accessed {{ "now" | date: "%Y-%m-%d" }}{{ "}" }}
+}

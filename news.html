@@ -1,0 +1,20 @@
+---
+layout: default
+title: News
+permalink: /news/
+---
+<div class="content-col">
+  <h1>News</h1>
+
+  {% assign items = site.data.news | sort: "date" | reverse %}
+  {% assign current_month = "" %}
+  {% for item in items %}
+    {% assign month_label = item.date | date: "%B %Y" %}
+    {% if month_label != current_month %}
+      {% unless forloop.first %}{% endunless %}
+      <div class="news-month">{{ month_label }}</div>
+      {% assign current_month = month_label %}
+    {% endif %}
+    <div class="news-item">{{ item.html }}</div>
+  {% endfor %}
+</div>
